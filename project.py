@@ -149,7 +149,7 @@ for col in ["Sales_Amount", "Profit", "Order_ID", "Customer_Rating"]:
 # ---------------- CENTERED LOGO AND TITLE ----------------
 logo_file = "Electro Mart Energy Logo.png"
 logo_left, logo_center, logo_right = st.columns([1, 2, 1])
-[22-10-2026 11:00 PM] ...... abin mp: with logo_center:
+with logo_center:
     try:
         st.image(logo_file, use_container_width=True)
     except Exception:
@@ -288,7 +288,7 @@ if "Order_Date" in filtered.columns and "Sales_Amount" in filtered.columns:
         .sum()
         .reset_index()
     )
-[22-10-2026 11:00 PM] ...... abin mp: if not monthly.empty:
+if not monthly.empty:
         fig_line = px.line(
             monthly,
             x="Order_Date",
@@ -406,7 +406,7 @@ if "Order_Status" in filtered.columns:
         .value_counts()
         .rename_axis("Order_Status")
         .reset_index(name="Transactions")
-[22-10-2026 11:00 PM] ...... abin mp: )
+)
     fig_status = px.bar(
         status_data,
         x="Order_Status",
