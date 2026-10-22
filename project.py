@@ -28,6 +28,67 @@ h1, h2, h3, p, label {
     color: #38bdf8;
     text-shadow: 0 0 15px rgba(56, 189, 248, 0.35);
     margin-bottom: 5px;
+    import streamlit as st
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+
+# ---------------- PAGE CONFIG ----------------
+st.set_page_config(
+    page_title="ELECTROMART",
+    page_icon="🛒",
+    layout="wide"
+)
+
+# ---------------- CUSTOM CSS ----------------
+st.markdown("""
+<style>
+.stApp {
+    background: linear-gradient(135deg, #022c22, #065f46, #134e4a);
+    color: white;
+}
+h1, h2, h3, p, label {
+    color: white !important;
+}
+.dashboard-title {
+    font-family: Verdana, sans-serif;
+    font-size: 46px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: #38bdf8;
+    text-shadow: 0 0 15px rgba(56, 189, 248, 0.35);
+    margin-bottom: 5px;
+    import streamlit as st
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+
+# ---------------- PAGE CONFIG ----------------
+st.set_page_config(
+    page_title="ELECTROMART",
+    page_icon="🛒",
+    layout="wide"
+)
+
+# ---------------- CUSTOM CSS ----------------
+st.markdown("""
+<style>
+.stApp {
+    background: linear-gradient(135deg, #022c22, #065f46, #134e4a);
+    color: white;
+}
+h1, h2, h3, p, label {
+    color: white !important;
+}
+.dashboard-title {
+    font-family: Verdana, sans-serif;
+    font-size: 46px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: #38bdf8;
+    text-shadow: 0 0 15px rgba(56, 189, 248, 0.35);
+    margin-bottom: 5px;
+    
     text-align: center;
 }
 .dashboard-subtitle {
@@ -59,6 +120,7 @@ section[data-testid="stSidebar"] {
 """, unsafe_allow_html=True)
 
 
+
 # ---------------- LOAD DATA ----------------
 @st.cache_data
 def load_data():
@@ -88,6 +150,7 @@ def load_data():
             data[col] = values
 
     # Preserve conventional capitalization for abbreviations.
+    
     if "Payment_Method" in data.columns:
         data["Payment_Method"] = data["Payment_Method"].replace({
             "Upi": "UPI",
@@ -118,7 +181,7 @@ except Exception as e:
 # ---------------- NUMERIC CONVERSION ----------------
 numeric_columns = [
     "Sales_Amount",
-    "Profit",
+        "Profit",
     "Quantity",
     "Cost_Amount",
     "Customer_Rating",
@@ -149,6 +212,7 @@ for col in ["Sales_Amount", "Profit", "Order_ID", "Customer_Rating"]:
 # ---------------- CENTERED LOGO AND TITLE ----------------
 logo_file = "Electro Mart Energy Logo.png"
 logo_left, logo_center, logo_right = st.columns([1, 2, 1])
+
 with logo_center:
     try:
         st.image(logo_file, use_container_width=True)
@@ -177,7 +241,7 @@ with st.container(border=True):
 
     years = sorted(df["Order_Year"].dropna().unique().tolist())
     regions = sorted(df["Region"].dropna().astype(str).unique().tolist())
-    categories = sorted(
+        categories = sorted(
         df["Product_Category"].dropna().astype(str).unique().tolist()
     )
 
@@ -207,7 +271,7 @@ with st.container(border=True):
 
 filtered = df[
     df["Order_Year"].isin(selected_years)
-    & df["Region"].isin(selected_regions)
+        & df["Region"].isin(selected_regions)
     & df["Product_Category"].isin(selected_categories)
 ].copy()
 
@@ -267,7 +331,7 @@ with g2:
         title={"text": "Profit Margin (%)"},
         number={"suffix": "%"},
         gauge={
-            "axis": {"range": [0, max(100, profit_margin)]},
+                        "axis": {"range": [0, max(100, profit_margin)]},
             "bar": {"color": "#fb923c"}
         }
     ))
@@ -288,7 +352,8 @@ if "Order_Date" in filtered.columns and "Sales_Amount" in filtered.columns:
         .sum()
         .reset_index()
     )
-if not monthly.empty:
+
+    if not monthly.empty:
         fig_line = px.line(
             monthly,
             x="Order_Date",
@@ -296,7 +361,7 @@ if not monthly.empty:
             markers=True,
             title="Monthly Sales Performance",
             labels={"Order_Date": "Month", "Sales_Amount": "Sales Amount"},
-            template="plotly_dark"
+                        template="plotly_dark"
         )
         fig_line.update_traces(line=dict(color="#38bdf8", width=3))
         fig_line.update_layout(
@@ -326,7 +391,7 @@ with left:
             color="Product_Category",
             text_auto=".2s",
             title="Category-wise Sales",
-            template="plotly_dark"
+                        template="plotly_dark"
         )
         fig_bar.update_layout(
             showlegend=False,
@@ -356,7 +421,7 @@ with right:
             paper_bgcolor="rgba(0,0,0,0)"
         )
         st.plotly_chart(fig_region, use_container_width=True)
-
+        
 
 # ---------------- PROFIT AND PAYMENT ANALYSIS ----------------
 left, right = st.columns(2)
@@ -386,7 +451,7 @@ with right:
         payment = filtered["Payment_Method"].value_counts().reset_index()
         payment.columns = ["Payment_Method", "Transactions"]
         fig_pie = px.pie(
-            payment,
+                        payment,
             names="Payment_Method",
             values="Transactions",
             hole=0.45,
@@ -406,7 +471,7 @@ if "Order_Status" in filtered.columns:
         .value_counts()
         .rename_axis("Order_Status")
         .reset_index(name="Transactions")
-)
+    )
     fig_status = px.bar(
         status_data,
         x="Order_Status",
@@ -416,7 +481,7 @@ if "Order_Status" in filtered.columns:
         title="Transactions by Order Status",
         template="plotly_dark"
     )
-    fig_status.update_layout(
+        fig_status.update_layout(
         showlegend=False,
         paper_bgcolor="rgba(0,0,0,0)"
     )
@@ -446,7 +511,7 @@ if "Product_Name" in filtered.columns and "Sales_Amount" in filtered.columns:
         )
         fig_products.update_layout(paper_bgcolor="rgba(0,0,0,0)")
         st.plotly_chart(fig_products, use_container_width=True)
-
+    
 
 # ---------------- TRANSACTION DETAILS ----------------
 st.subheader("🧾 Transaction Details")
